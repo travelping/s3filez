@@ -414,6 +414,9 @@ urlsplit(Url) ->
 
 urlsplit_hostpath(HP) ->
     case binary:split(HP, <<"/">>) of
-        [Host,Path] -> {Host,<<"/", Path/binary>>};
+        [Host,Path] -> {Host,urlsplit_path(binary:split(Path, <<"?">>))};
         [Host] -> {Host, <<"/">>}
     end.
+
+urlsplit_path([Path]) -> <<"/", Path/binary>>;
+urlsplit_path([Path, _]) -> <<"/", Path/binary>>.
